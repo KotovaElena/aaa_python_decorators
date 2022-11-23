@@ -1,15 +1,17 @@
 import sys
+from functools import wraps
 
 
 def redirect_output(filepath):
     def out_wrapper(function):
-        def in_wrapper():
+        @wraps(function)
+        def in_wrapper(*args, **kwargs):
             tmp_stdout = sys.stdout
-            f = open(filepath, "w")
-            sys.stdout = f
-            function()
-            f.close()
+            with open(filepath, "w") as f:
+                sys.stdout = f
+                result = function(*args, **kwargs)
             sys.stdout = tmp_stdout
+            return result
         return in_wrapper
     return out_wrapper
 

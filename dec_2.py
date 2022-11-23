@@ -13,8 +13,9 @@ def my_write(string_text):
 def timed_output(function):
     def wrapper(*args, **kwargs):
         sys.stdout.write = my_write
-        function(*args, **kwargs)
+        result = function(*args, **kwargs)
         sys.stdout.write = original_write
+        return result
     return wrapper
 
 
